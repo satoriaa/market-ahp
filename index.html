@@ -1,0 +1,328 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <!-- Mengatur karakter agar mendukung Bahasa Indonesia -->
+  <meta charset="UTF-8" />
+
+  <!-- Membuat tampilan responsif pada berbagai ukuran layar -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- Judul halaman pada tab browser -->
+  <title>GIS-DSS AHP | Penentuan Lokasi Supermarket Jakarta Barat</title>
+
+  <!-- Optimasi koneksi ke Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+  <!-- Menggunakan font Plus Jakarta Sans -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  />
+
+  <!-- Memuat stylesheet Leaflet untuk tampilan peta -->
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  />
+
+  <!-- Memuat stylesheet utama dashboard -->
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+  <!-- HEADER DASHBOARD -->
+  <header class="topbar">
+    <div class="brand">
+
+      <!-- Identitas aplikasi -->
+      <span class="badge">GIS-MCDM • AHP</span>
+
+      <!-- Judul utama aplikasi -->
+      <h1>SPK Penentuan Lokasi Strategis Supermarket — Jakarta Barat</h1>
+
+      <!-- Informasi anggota kelompok -->
+      <p>
+        Tim UNTAR: Muhammad Satria Rizky (535240002) •
+        George Lung Lung Devago (535240033) •
+        Andrew Anstendyk Takalamingan (535240130)
+      </p>
+    </div>
+
+    <!-- Tombol aksi dashboard -->
+    <div class="header-actions">
+
+      <!-- Mengembalikan matriks ke kondisi awal -->
+      <button id="btnReset" class="btn btn-secondary">
+        Reset Matriks Default
+      </button>
+
+      <!-- Mengunduh hasil perhitungan dalam format CSV -->
+      <button id="btnExport" class="btn btn-primary">
+        Export Hasil CSV
+      </button>
+    </div>
+  </header>
+
+
+  <!-- KONTEN UTAMA DASHBOARD -->
+  <main class="container">
+
+    <!-- RINGKASAN METRIK -->
+    <section class="kpi-grid">
+
+      <!-- KPI total penduduk -->
+      <div class="card kpi">
+        <span class="kpi-label">Total Penduduk (BPS 2024)</span>
+        <strong class="kpi-value" id="kpiPop">2.539.534 Jiwa</strong>
+        <small>8 Kecamatan / 56 Kelurahan</small>
+      </div>
+
+      <!-- KPI jumlah minimarket -->
+      <div class="card kpi">
+        <span class="kpi-label">Total Minimarket Eksisting</span>
+        <strong class="kpi-value" id="kpiCompetitor">637 Gerai</strong>
+        <small>Hasil Ekstraksi Data Ritel Jakbar</small>
+      </div>
+
+      <!-- KPI konsistensi AHP -->
+      <div class="card kpi">
+        <span class="kpi-label">Consistency Ratio (CR)</span>
+        <strong class="kpi-value" id="kpiCR">0.000</strong>
+        <small id="kpiCRStatus" class="status-ok">
+          Konsisten (CR ≤ 0,10)
+        </small>
+      </div>
+
+      <!-- KPI rekomendasi lokasi terbaik -->
+      <div class="card kpi highlight">
+        <span class="kpi-label">Rekomendasi Lokasi #1</span>
+        <strong class="kpi-value" id="kpiTopLoc">-</strong>
+        <small id="kpiTopScore">Skor WLC: -</small>
+      </div>
+    </section>
+
+
+    <!-- PETA GIS DAN PERHITUNGAN AHP -->
+    <section class="grid-2-col">
+
+      <!-- PANEL PETA GIS -->
+      <div class="card map-card">
+        <div class="card-header">
+
+          <h2>Peta Analisis Spasial & Kesesuaian Lahan (GIS)</h2>
+
+          <!-- Kontrol layer peta -->
+          <div class="map-controls">
+
+            <label>
+              <input type="checkbox" id="toggleBuffer" checked />
+              Radius Layanan (1,5 km)
+            </label>
+
+            <label>
+              <input type="checkbox" id="toggleCandidates" checked />
+              Titik Kandidat Lahan
+            </label>
+
+          </div>
+        </div>
+
+        <!-- Container peta Leaflet -->
+        <div id="map"></div>
+
+        <!-- Legenda peta -->
+        <div class="legend">
+          <span>
+            <i style="background:#16a34a"></i>
+            Sangat Strategis (≥ 4.0)
+          </span>
+
+          <span>
+            <i style="background:#eab308"></i>
+            Cukup Strategis (3.3 - 3.99)
+          </span>
+
+          <span>
+            <i style="background:#dc2626"></i>
+            Kurang Strategis (&lt; 3.3)
+          </span>
+        </div>
+      </div>
+
+
+      <!-- PANEL PERHITUNGAN AHP -->
+      <div class="card">
+
+        <div class="card-header">
+          <h2>Matriks Perbandingan Berpasangan (Skala Saaty 1–9)</h2>
+        </div>
+
+        <!-- Petunjuk penggunaan matriks -->
+        <p class="hint">
+          Ubah nilai perbandingan pada sel segitiga atas;
+          nilai resiprokal otomatis terhitung.
+        </p>
+
+        <!-- Tabel matriks yang dibuat oleh JavaScript -->
+        <div class="table-wrap">
+          <table id="ahpMatrixTable" class="matrix-table"></table>
+        </div>
+
+        <!-- Panel bobot kriteria -->
+        <div class="weights-box">
+
+          <h3>
+            Vektor Bobot Prioritas (w<sub>i</sub>) & Uji Konsistensi
+          </h3>
+
+          <!-- Daftar bobot kriteria dari hasil AHP -->
+          <div id="weightsList" class="weights-grid"></div>
+
+          <!-- Informasi konsistensi -->
+          <div class="consistency-meta">
+
+            <span>
+              λ<sub>max</sub>:
+              <strong id="valLambda">-</strong>
+            </span>
+
+            <span>
+              CI:
+              <strong id="valCI">-</strong>
+            </span>
+
+            <span>
+              RI (n=5):
+              <strong>1,12</strong>
+            </span>
+
+            <span>
+              CR:
+              <strong id="valCR">-</strong>
+            </span>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- RANKING KECAMATAN -->
+    <section class="card">
+
+      <div class="card-header">
+
+        <h2>
+          Pemeringkatan Wilayah Kecamatan
+          (Weighted Linear Combination)
+        </h2>
+
+        <!-- Filter data kelurahan berdasarkan kecamatan -->
+        <select id="filterKecamatan">
+          <option value="ALL">Semua Kecamatan (8 Wilayah)</option>
+        </select>
+
+      </div>
+
+      <!-- Tabel hasil pemeringkatan -->
+      <div class="table-wrap">
+
+        <table id="rankingTable" class="data-table">
+
+          <thead>
+            <tr>
+              <th>Peringkat</th>
+              <th>Kecamatan</th>
+              <th>Jumlah Penduduk (Jiwa)</th>
+              <th>Kepadatan (Jiwa/km²)</th>
+              <th>Ritel Eksisting</th>
+              <th>Skor C1 (Kepadatan)</th>
+              <th>Skor C2 (Akses Jalan)</th>
+              <th>Skor C3 (Permukiman)</th>
+              <th>Skor C4 (Jarak Kompetitor)</th>
+              <th>Skor C5 (Zonasi RDTR)</th>
+              <th>Total Skor WLC</th>
+              <th>Kategori Kelayakan</th>
+            </tr>
+          </thead>
+
+          <tbody></tbody>
+
+        </table>
+      </div>
+    </section>
+
+
+    <!-- DETAIL KELURAHAN DAN KANDIDAT LOKASI -->
+    <section class="grid-2-col">
+
+      <!-- TABEL KELURAHAN -->
+      <div class="card">
+
+        <div class="card-header">
+          <h2>Detail Demografi Kelurahan (Data BPS 2024)</h2>
+        </div>
+
+        <div class="table-wrap scroll-y">
+
+          <table id="kelurahanTable" class="data-table">
+
+            <thead>
+              <tr>
+                <th>Kecamatan</th>
+                <th>Kelurahan</th>
+                <th>Laki-laki</th>
+                <th>Perempuan</th>
+                <th>Total Penduduk</th>
+              </tr>
+            </thead>
+
+            <tbody></tbody>
+
+          </table>
+        </div>
+      </div>
+
+
+      <!-- TABEL KANDIDAT SUPERMARKET -->
+      <div class="card">
+
+        <div class="card-header">
+          <h2>Rekomendasi Titik Tapak Kandidat Supermarket (Simulasi GIS)</h2>
+        </div>
+
+        <div class="table-wrap scroll-y">
+
+          <table id="candidateTable" class="data-table">
+
+            <thead>
+              <tr>
+                <th>Kode</th>
+                <th>Nama Lokasi Kandidat</th>
+                <th>Kecamatan</th>
+                <th>Akses Jalan Utama</th>
+                <th>Skor Kesesuaian</th>
+              </tr>
+            </thead>
+
+            <tbody></tbody>
+
+          </table>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+
+  <!-- Memuat JavaScript Leaflet untuk peta interaktif -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <!-- Memuat logika utama aplikasi AHP dan GIS -->
+  <script src="app.js"></script>
+
+</body>
+</html>

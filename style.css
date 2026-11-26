@@ -1,0 +1,1101 @@
+
+/* =========================================================
+   GIS-DSS AHP — MODERN GEOSPATIAL DASHBOARD
+   File: style.css
+   ========================================================= */
+
+/* 1. DESIGN TOKENS: WARNA, RADIUS, DAN SHADOW */
+:root {
+  --bg: #f3f6fc;
+  --surface: #ffffff;
+  --surface-soft: #f8faff;
+
+  --navy: #101c35;
+  --navy-light: #1b3155;
+
+  --primary: #3563e9;
+  --primary-hover: #244dcc;
+  --primary-soft: #edf2ff;
+
+  --teal: #0d9488;
+  --green: #0f9f78;
+  --green-soft: #e8faf3;
+
+  --orange: #d99024;
+  --orange-soft: #fff7e8;
+
+  --red: #df535d;
+  --red-soft: #fff0f1;
+
+  --text: #172b4d;
+  --muted: #718096;
+  --border: #e5ebf4;
+
+  --radius-sm: 10px;
+  --radius-md: 15px;
+  --radius-lg: 20px;
+
+  --shadow-sm: 0 3px 12px rgba(25, 45, 85, 0.045);
+  --shadow-md: 0 12px 30px rgba(25, 45, 85, 0.075);
+  --shadow-lg: 0 22px 55px rgba(7, 20, 48, 0.17);
+}
+
+/* 2. RESET DAN PENGATURAN DASAR */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Plus Jakarta Sans', 'Segoe UI', sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100vh;
+  background:
+    radial-gradient(
+      ellipse at 5% 0%,
+      rgba(72, 112, 238, 0.10),
+      transparent 34rem
+    ),
+    radial-gradient(
+      ellipse at 95% 12%,
+      rgba(16, 185, 129, 0.07),
+      transparent 28rem
+    ),
+    var(--bg);
+
+  color: var(--text);
+  line-height: 1.6;
+  letter-spacing: -0.01em;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* 3. ANIMASI */
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 4. HEADER UTAMA */
+.topbar {
+  position: relative;
+  overflow: hidden;
+
+  min-height: 215px;
+  padding: 2.2rem max(1.5rem, calc((100vw - 1500px) / 2 + 1.5rem));
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+
+  color: #ffffff;
+
+  background:
+    radial-gradient(
+      circle at 82% 15%,
+      rgba(77, 132, 255, 0.32),
+      transparent 24rem
+    ),
+    radial-gradient(
+      circle at 8% 110%,
+      rgba(16, 185, 129, 0.17),
+      transparent 25rem
+    ),
+    linear-gradient(
+      120deg,
+      #0b1730 0%,
+      #142c55 58%,
+      #1b3f70 100%
+    );
+
+  box-shadow: var(--shadow-lg);
+}
+
+/* Dekorasi grid pada header */
+.topbar::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  background-image:
+    linear-gradient(
+      rgba(255, 255, 255, 0.035) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.035) 1px,
+      transparent 1px
+    );
+
+  background-size: 34px 34px;
+  pointer-events: none;
+}
+
+/* Dekorasi lingkaran */
+.topbar::after {
+  content: "";
+  position: absolute;
+
+  right: 8%;
+  bottom: -8rem;
+
+  width: 21rem;
+  height: 21rem;
+
+  border: 1px solid rgba(191, 219, 254, 0.18);
+  border-radius: 50%;
+
+  box-shadow:
+    0 0 0 24px rgba(191, 219, 254, 0.025),
+    0 0 0 52px rgba(191, 219, 254, 0.02);
+
+  pointer-events: none;
+}
+
+/* Area identitas aplikasi */
+.brand {
+  position: relative;
+  z-index: 1;
+  max-width: 900px;
+}
+
+/* Badge GIS-DSS */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  padding: 0.38rem 0.85rem;
+  margin-bottom: 0.8rem;
+
+  border: 1px solid rgba(147, 197, 253, 0.38);
+  border-radius: 999px;
+
+  background: rgba(59, 130, 246, 0.18);
+  color: #dbeafe;
+
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.badge::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+
+  border-radius: 50%;
+  background: #38bdf8;
+  box-shadow: 0 0 8px #38bdf8;
+}
+
+/* Judul dashboard */
+.topbar h1 {
+  font-size: clamp(1.65rem, 3vw, 2.55rem);
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -0.045em;
+
+  color: #ffffff;
+  text-shadow: 0 3px 18px rgba(0, 0, 0, 0.16);
+}
+
+/* Deskripsi dashboard */
+.topbar p {
+  max-width: 720px;
+  margin-top: 0.65rem;
+
+  color: #c5d3e8;
+  font-size: 0.92rem;
+  line-height: 1.75;
+}
+
+/* Area tombol header */
+.header-actions {
+  position: relative;
+  z-index: 1;
+
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+}
+
+/* 5. BUTTON */
+.btn {
+  min-height: 43px;
+  padding: 0.68rem 1.15rem;
+
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.45rem;
+
+  border: 1px solid transparent;
+  border-radius: 12px;
+
+  font-size: 0.84rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+
+  cursor: pointer;
+
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease,
+    background 180ms ease,
+    border-color 180ms ease;
+}
+
+/* Efek ketika tombol diarahkan */
+.btn:hover {
+  transform: translateY(-2px);
+}
+
+/* Efek ketika tombol ditekan */
+.btn:active {
+  transform: translateY(0);
+}
+
+/* Tombol utama */
+.btn-primary {
+  color: #ffffff;
+
+  background: linear-gradient(
+    135deg,
+    #4d7df5,
+    #315de0
+  );
+
+  box-shadow: 0 7px 18px rgba(49, 93, 224, 0.28);
+}
+
+.btn-primary:hover {
+  background: linear-gradient(
+    135deg,
+    #5b8aff,
+    #3563e9
+  );
+
+  box-shadow: 0 10px 24px rgba(49, 93, 224, 0.36);
+}
+
+/* Tombol sekunder pada header */
+.btn-secondary {
+  color: #f8fbff;
+
+  background: rgba(255, 255, 255, 0.09);
+  border-color: rgba(219, 234, 254, 0.24);
+  backdrop-filter: blur(8px);
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.17);
+  border-color: rgba(219, 234, 254, 0.42);
+}
+
+/* 6. CONTAINER UTAMA */
+.container {
+  width: 100%;
+  max-width: 1500px;
+
+  margin: 2rem auto 3rem;
+  padding: 0 1.75rem;
+
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* 7. KPI GRID */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+/* 8. CARD UMUM */
+.card {
+  min-width: 0;
+  padding: 1.45rem;
+
+  background: rgba(255, 255, 255, 0.96);
+
+  border: 1px solid rgba(222, 231, 243, 0.9);
+  border-radius: var(--radius-lg);
+
+  box-shadow: var(--shadow-sm);
+
+  animation: fadeUp 420ms ease both;
+
+  transition:
+    transform 200ms ease,
+    box-shadow 200ms ease,
+    border-color 200ms ease;
+}
+
+.card:hover {
+  border-color: #d5e0f1;
+  box-shadow: var(--shadow-md);
+}
+
+/* 9. KPI CARDS */
+.kpi {
+  position: relative;
+  overflow: hidden;
+
+  min-height: 145px;
+  padding: 1.35rem 1.4rem;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 0.6rem;
+
+  border-radius: 19px;
+
+  background: linear-gradient(
+    145deg,
+    #ffffff,
+    #fbfcff
+  );
+}
+
+/* Garis warna pada bagian atas KPI */
+.kpi::before {
+  content: "";
+  position: absolute;
+
+  top: 0;
+  left: 0;
+  right: 0;
+
+  height: 4px;
+  opacity: 0.95;
+}
+
+/* Warna berbeda untuk setiap KPI */
+.kpi:nth-child(1)::before {
+  background: linear-gradient(90deg, #3b82f6, #60a5fa);
+}
+
+.kpi:nth-child(2)::before {
+  background: linear-gradient(90deg, #0d9488, #2dd4bf);
+}
+
+.kpi:nth-child(3)::before {
+  background: linear-gradient(90deg, #d97706, #fbbf24);
+}
+
+.kpi:nth-child(4)::before {
+  background: linear-gradient(90deg, #059669, #34d399);
+}
+
+/* Background khusus tiap kartu */
+.kpi:nth-child(1) {
+  background:
+    radial-gradient(
+      circle at 100% 0%,
+      rgba(59, 130, 246, 0.09),
+      transparent 58%
+    ),
+    #ffffff;
+}
+
+.kpi:nth-child(2) {
+  background:
+    radial-gradient(
+      circle at 100% 0%,
+      rgba(20, 184, 166, 0.10),
+      transparent 58%
+    ),
+    #ffffff;
+}
+
+.kpi:nth-child(3) {
+  background:
+    radial-gradient(
+      circle at 100% 0%,
+      rgba(245, 158, 11, 0.10),
+      transparent 58%
+    ),
+    #ffffff;
+}
+
+.kpi:nth-child(4) {
+  background:
+    radial-gradient(
+      circle at 100% 0%,
+      rgba(16, 185, 129, 0.10),
+      transparent 58%
+    ),
+    #ffffff;
+}
+
+/* KPI pilihan utama */
+.kpi.highlight {
+  border-color: #a7f3d0;
+  background:
+    radial-gradient(
+      circle at 100% 0%,
+      rgba(16, 185, 129, 0.12),
+      transparent 60%
+    ),
+    #ffffff;
+}
+
+/* Label KPI */
+.kpi-label {
+  color: #78869c;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+
+/* Angka KPI */
+.kpi-value {
+  color: #15284a;
+
+  font-size: clamp(1.45rem, 2.2vw, 2rem);
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -0.045em;
+
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+
+/* Keterangan KPI */
+.kpi small {
+  color: #8491a5;
+  font-size: 0.75rem;
+}
+
+/* Status konsistensi */
+.status-ok {
+  color: var(--green);
+  font-weight: 800;
+}
+
+.status-bad {
+  color: var(--red);
+  font-weight: 800;
+}
+
+/* 10. LAYOUT DUA KOLOM */
+.grid-2-col {
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1.13fr)
+    minmax(0, 0.87fr);
+
+  gap: 1.25rem;
+}
+
+/* 11. HEADER CARD */
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+
+  gap: 0.75rem;
+  margin-bottom: 1.2rem;
+}
+
+/* Judul setiap panel */
+.card-header h2 {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  color: #172b4d;
+
+  font-size: 1.08rem;
+  font-weight: 800;
+  letter-spacing: -0.025em;
+}
+
+/* 12. KONTROL PETA */
+.map-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+/* Label checkbox */
+.map-controls label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+
+  padding: 0.4rem 0.7rem;
+
+  border: 1px solid #e5ebf4;
+  border-radius: 999px;
+
+  background: #f8faff;
+  color: #53627a;
+
+  font-size: 0.76rem;
+  font-weight: 700;
+
+  cursor: pointer;
+  transition: 150ms ease;
+}
+
+.map-controls label:hover {
+  background: #edf3ff;
+  border-color: #cbd9f5;
+}
+
+input[type="checkbox"] {
+  accent-color: var(--primary);
+  cursor: pointer;
+}
+
+/* 13. PETA LEAFLET */
+#map {
+  width: 100%;
+  height: 470px;
+
+  border: 1px solid #dce5f1;
+  border-radius: 17px;
+
+  background: #e2e8f0;
+
+  box-shadow: 0 8px 24px rgba(25, 45, 85, 0.08);
+
+  overflow: hidden;
+  z-index: 1;
+}
+
+/* Popup Leaflet */
+.leaflet-popup-content-wrapper {
+  border-radius: 12px;
+  box-shadow: 0 8px 25px rgba(15, 23, 42, 0.15);
+}
+
+.leaflet-popup-content {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 0.82rem;
+  line-height: 1.65;
+}
+
+.leaflet-popup-content strong {
+  color: var(--navy);
+}
+
+/* 14. LEGENDA PETA */
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+
+  gap: 0.65rem 1rem;
+  margin-top: 1rem;
+  padding: 0.8rem 1rem;
+
+  border: 1px solid #e8eef6;
+  border-radius: 12px;
+
+  background: #f8faff;
+  color: #58677e;
+
+  font-size: 0.76rem;
+}
+
+.legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.legend i {
+  display: inline-block;
+
+  width: 11px;
+  height: 11px;
+
+  border-radius: 50%;
+
+  box-shadow:
+    0 0 0 2px rgba(255, 255, 255, 0.9),
+    0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+/* 15. TEKS INFORMASI */
+.hint {
+  margin: -0.25rem 0 0.85rem;
+
+  color: #7b899e;
+  font-size: 0.8rem;
+  line-height: 1.65;
+}
+
+/* 16. TABEL */
+.table-wrap {
+  width: 100%;
+  overflow-x: auto;
+
+  border-radius: 14px;
+}
+
+.scroll-y {
+  max-height: 350px;
+  overflow-y: auto;
+
+  border: 1px solid var(--border);
+  border-radius: 14px;
+}
+
+/* Tabel umum */
+table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+
+  font-size: 0.83rem;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Sel tabel */
+th,
+td {
+  padding: 0.78rem 0.82rem;
+
+  text-align: center;
+  vertical-align: middle;
+
+  border-bottom: 1px solid #edf1f7;
+}
+
+/* Header tabel */
+th {
+  padding-top: 0.85rem;
+  padding-bottom: 0.85rem;
+
+  background: #f5f8fd;
+  color: #65748b;
+
+  font-size: 0.69rem;
+  font-weight: 800;
+  letter-spacing: 0.075em;
+  text-transform: uppercase;
+}
+
+/* Header tetap terlihat ketika tabel digulir */
+thead th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+
+  box-shadow: inset 0 -1px 0 #e3eaf4;
+}
+
+/* Hover baris tabel */
+tbody tr {
+  transition: background 130ms ease;
+}
+
+tbody tr:nth-child(even) {
+  background: #fbfcff;
+}
+
+tbody tr:hover {
+  background: #f0f5ff;
+}
+
+tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+/* Kolom nama pada tabel */
+.data-table td:nth-child(2) {
+  text-align: left;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+/* Lebar minimum tabel ranking */
+#rankingTable {
+  min-width: 1080px;
+}
+
+/* Highlight peringkat pertama */
+#rankingTable tbody tr:first-child {
+  background: linear-gradient(
+    90deg,
+    #e8faf3 0%,
+    #f5fcf9 100%
+  );
+}
+
+#rankingTable tbody tr:first-child td {
+  border-bottom-color: #d9f3e8;
+}
+
+#rankingTable tbody tr:first-child td:first-child {
+  color: #07845f;
+  font-weight: 900;
+}
+
+/* 17. MATRIKS AHP */
+.matrix-table {
+  min-width: 420px;
+  border-spacing: 0;
+}
+
+/* Kolom kriteria */
+.matrix-table td:first-child {
+  text-align: left;
+
+  background: #f6f8fc;
+  color: #334766;
+
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+/* Input perbandingan dan filter */
+.matrix-table select,
+#filterKecamatan {
+  min-height: 39px;
+  padding: 0.45rem 0.7rem;
+
+  border: 1px solid #dce5f1;
+  border-radius: 10px;
+
+  background: #ffffff;
+  color: #243b63;
+
+  font-size: 0.82rem;
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+/* Select khusus matriks */
+.matrix-table select {
+  min-height: 35px;
+  padding: 0.3rem 0.45rem;
+
+  background: #f1f5ff;
+  border-color: #d9e4ff;
+  color: #315bd0;
+}
+
+/* Fokus input */
+.matrix-table select:focus,
+#filterKecamatan:focus {
+  outline: none;
+
+  border-color: #7397f5;
+
+  box-shadow:
+    0 0 0 4px rgba(59, 99, 233, 0.12);
+}
+
+/* Diagonal matriks */
+.diag-cell {
+  background: #edf1f7;
+  color: #718096;
+  font-weight: 800;
+}
+
+/* Nilai resiprokal */
+.recip-cell {
+  background: #fafbfe;
+  color: #8b98aa;
+}
+
+/* 18. BOBOT KRITERIA */
+.weights-box {
+  margin-top: 1.35rem;
+  padding-top: 1.2rem;
+
+  border-top: 1px solid #e8edf5;
+}
+
+.weights-box h3 {
+  margin-bottom: 0.85rem;
+
+  color: #263b5e;
+  font-size: 0.9rem;
+  font-weight: 800;
+}
+
+/* Grid bobot */
+.weights-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: 0.7rem;
+}
+
+/* Kartu bobot */
+.weight-pill {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+
+  padding: 0.8rem 0.85rem;
+
+  border: 1px solid #e5ebf4;
+  border-radius: 13px;
+
+  background: linear-gradient(
+    145deg,
+    #ffffff,
+    #f7f9fe
+  );
+
+  transition: 180ms ease;
+}
+
+.weight-pill:hover {
+  border-color: #c8d7fb;
+  transform: translateY(-2px);
+}
+
+.weight-pill span {
+  color: #718096;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.weight-pill strong {
+  color: #3563e9;
+  font-size: 1.18rem;
+  font-weight: 900;
+  letter-spacing: -0.03em;
+}
+
+/* 19. INFORMASI KONSISTENSI */
+.consistency-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem 1.4rem;
+
+  padding: 0.85rem 1rem;
+
+  border: 1px solid #e6edf6;
+  border-radius: 13px;
+
+  background: #f7f9fd;
+  color: #718096;
+}
+
+.consistency-meta strong {
+  color: #243b63;
+}
+
+/* 20. BADGE PERINGKAT */
+.pill-rank {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+
+  padding: 0.32rem 0.72rem;
+
+  border: 1px solid transparent;
+  border-radius: 999px;
+
+  font-size: 0.72rem;
+  font-weight: 800;
+  white-space: nowrap;
+}
+
+.cat-high {
+  background: #e8faf3;
+  color: #087b59;
+  border-color: #c5efdf;
+}
+
+.cat-mid {
+  background: #fff7e8;
+  color: #a96a0b;
+  border-color: #f8e3b8;
+}
+
+.cat-low {
+  background: #fff0f1;
+  color: #c33d49;
+  border-color: #f6d0d3;
+}
+
+/* 21. SCROLLBAR */
+.table-wrap::-webkit-scrollbar,
+.scroll-y::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.table-wrap::-webkit-scrollbar-thumb,
+.scroll-y::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 999px;
+}
+
+.table-wrap::-webkit-scrollbar-track,
+.scroll-y::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+/* 22. FOCUS KEYBOARD */
+button:focus-visible,
+select:focus-visible,
+input:focus-visible {
+  outline: 3px solid rgba(59, 99, 233, 0.28);
+  outline-offset: 3px;
+}
+
+/* 23. ANIMASI KARTU */
+.kpi-grid .card:nth-child(2) {
+  animation-delay: 45ms;
+}
+
+.kpi-grid .card:nth-child(3) {
+  animation-delay: 90ms;
+}
+
+.kpi-grid .card:nth-child(4) {
+  animation-delay: 135ms;
+}
+
+/* 24. RESPONSIVE TABLET */
+@media (max-width: 1100px) {
+  .kpi-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .grid-2-col {
+    grid-template-columns: 1fr;
+  }
+
+  #map {
+    height: 430px;
+  }
+}
+
+/* 25. RESPONSIVE SMARTPHONE */
+@media (max-width: 700px) {
+  .topbar {
+    min-height: auto;
+    padding: 1.6rem 1rem;
+  }
+
+  .topbar h1 {
+    font-size: 1.65rem;
+  }
+
+  .topbar p {
+    font-size: 0.82rem;
+  }
+
+  .header-actions {
+    width: 100%;
+  }
+
+  .header-actions .btn {
+    flex: 1;
+  }
+
+  .container {
+    margin-top: 1.1rem;
+    padding: 0 0.85rem;
+    gap: 1rem;
+  }
+
+  .kpi-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.7rem;
+  }
+
+  .kpi {
+    min-height: 125px;
+    padding: 1rem;
+  }
+
+  .kpi-value {
+    font-size: 1.35rem;
+  }
+
+  .card {
+    padding: 1rem;
+    border-radius: 16px;
+  }
+
+  .card-header h2 {
+    font-size: 0.98rem;
+  }
+
+  #map {
+    height: 350px;
+    border-radius: 13px;
+  }
+
+  .map-controls {
+    width: 100%;
+  }
+
+  .map-controls label {
+    font-size: 0.7rem;
+  }
+
+  th,
+  td {
+    padding: 0.65rem 0.6rem;
+  }
+
+  .weights-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* 26. SMARTPHONE KECIL */
+@media (max-width: 400px) {
+  .kpi-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .header-actions {
+    flex-direction: column;
+  }
+
+  .header-actions .btn {
+    width: 100%;
+  }
+
+  .topbar h1 {
+    font-size: 1.4rem;
+  }
+}
+
+/* 27. AKSESIBILITAS: KURANGI ANIMASI */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
